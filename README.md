@@ -29,6 +29,7 @@ It is a Project to provide services for Car in a Garage and various functionalit
   ==> This Project is made using 
       ⨀ C#
       ⨀ Jquery
+      ⨀ Javascript
       ⨀ Ajax
       ⨀ Html
       ⨀ CSS 
