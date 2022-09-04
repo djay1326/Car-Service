@@ -1,0 +1,391 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Dal.CustomModels.CustomModelMechanicDashboard
+@{
+}
+
+@*<head>
+
+
+    </head>*@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<script>
+    function StarRating(rate, id) {
+        console.log(rate);
+        console.log(typeof (parseFloat(rate)));
+        console.log(parseFloat(rate).toFixed(1));
+        let allStars = "#rateGarage_" + id;
+        console.log("#rateGarage_" + id);
+        //$('#rateGarage_' + id).html("hello");
+        $('#rateGarage_' + id).rateYo({
+
+            rating: parseFloat(rate).toFixed(1),
+            starWidth: "20px",
+            readOnly: true
+        }
+        );
+    };
+</script>
+
+
+<div class="row ">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h6 class="font-weight-600" style="margin-bottom:55px;">Today's Appointments</h6>
+                                <h5 class="mb-0"><span class="col-purple">@Model.Appointments</span></h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/1.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-weight-600" style="margin-bottom:70px;"> My Garages</h5>
+
+                                <h5 class="mb-0"><span class="col-orange">@Model.GarageCount</span></h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/3.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="mb-5 font-weight-bold">Week's Revenue</h5>
+
+                                <h5 class="mb-0">
+                                    <span class="col-blue">₹@Model.WeekIncome</span>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/4.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="mb-5 font-weight-bold">Monthly Revenue</h5>
+                                @*<h2 class="mb-3 font-18">$48,697</h2>*@
+                                <h5 class="mb-0"><span class="col-green">₹@Model.MonthIncome</span></h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/4.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="mb-5 font-weight-bold">Annual Revenue</h5>
+
+                                <h5 class="mb-0"><span class="col-red">₹@Model.YearIncome</span></h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/4.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-lg-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 style="font-style:italic;">Appointments</h4>
+                <div class="d-block mr-0 ml-auto">
+                    <a asp-controller="CarAppointment" asp-action="ListAppointmentRequestsforMechanic" class="btn btn-primary">More</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>User Details</th>
+                                <th>Car Details</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model.FirstTableData)
+                            {
+
+                                <tr style="font-size:14px;">
+                                    <td>
+                                        @item.UserName<br />
+                                        @item.AddressLine1,@item.AddressLine2<br />
+                                        @item.City - @item.PostalCode<br />
+                                        @item.State
+                                    </td>
+                                    <td>
+                                        @item.CarModel<br />
+                                        @item.CarName<br />
+                                        @item.CarNumber
+                                    </td>
+                                    <td>
+                                        @if (item.ServiceStatus == 1)
+                                        {
+                                            <span class="pending">Pending</span>
+                                        }
+
+                                        @if (item.ServiceStatus == 3)
+                                        {
+                                            <span class="cancelled">Cancel</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.ServiceStatus == 1)
+                                        {
+                                            <button type="button" class="btn dropDownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                &#8942
+                                            </button>
+                                        }
+
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.Id" asp-route-status="2" asp-route-dashboardId="100" class="text-decoration-none">
+                                                    <button class="dropdown-item" type="button">Accept</button>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.Id" asp-route-status="3" asp-route-dashboardId="100" class="text-decoration-none">
+                                                    <button class="dropdown-item" type="button">Cancel</button>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+
+
+                            }
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 style="font-style:italic;">Appointment Services</h4>
+                <div class="d-block mr-0 ml-auto">
+                    <a asp-controller="CarAppointment" asp-action="ListApprovedAppointments" class="btn btn-info">More</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="overflow-x:hidden;">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr >
+                                <th>User Details</th>
+                                <th>Car Details</th>
+                                <th>Garage Details</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model.SecondTableData)
+                            {
+                                <tr style="font-size:14px;">
+                                    <td>
+                                        @item.NameOfUser<br />
+                                        @item.UserAddress1,@item.UserAddress2<br />
+                                        @item.UserCity - @item.UserPostalCode<br />
+                                        @item.UserState
+                                    </td>
+                                    <td>
+                                        @item.CarModel<br />
+                                        @item.CarName<br />
+                                        @item.CarNumber
+                                    </td>
+                                    <td>
+                                        @item.GarageName<br />
+                                        @item.GarageAdd1<br />
+                                        @item.GarageAdd2<br />
+                                        @item.GarageCity-  @item.GaragePostalCode<br />
+                                        @item.GarageState
+                                    </td>
+                                    <td>
+                                        @if (item.MechanicServiceStatus == 2)
+                                        {
+                                            <span class="completed">Accept</span>
+                                        }
+                                        @if (item.MechanicServiceStatus == 4)
+                                        {
+                                            <span class="progress">In.Progress</span>
+                                        }
+                                        @if (item.MechanicServiceStatus == 5)
+                                        {
+                                            <span class="waiting">Waiting for</span>
+                                            <span class="waiting2">Parts</span>
+                                        }
+                                        @if (item.MechanicServiceStatus == 6)
+                                        {
+                                            <span class="done">Completed</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.MechanicServiceStatus == 2 || item.MechanicServiceStatus == 4 || item.MechanicServiceStatus == 5)
+                                        {
+                                            <button type="button" class="btn dropDownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                &#8942
+                                            </button>
+                                        }
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.IdOfAppointment" asp-route-status="4" class="text-decoration-none">
+                                                    <button class="dropdown-item" type="button">In Progress</button>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.IdOfAppointment" asp-route-status="5" class="text-decoration-none">
+                                                    <button class="dropdown-item" type="button">Waiting For Parts</button>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.IdOfAppointment" asp-route-status="6" class="text-decoration-none">
+                                                    <button class="dropdown-item" type="button">Completed</button>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-lg-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Appointment Services</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>User Details</th>
+                                <th>Ratings</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model.ThirdTableData)
+                            {
+                               
+                                    <tr style="font-size:14px;">
+                                        <td>
+                                            @item.UserName<br />
+                                            @item.AddressLine1,@item.AddressLine2<br />
+                                            @item.City - @item.PostalCode<br />
+                                            @item.State
+                                        </td>
+                                        <td>
+                                            <div id="rateGarage_@item.AppointmentId"></div> 
+                                            <script>StarRating('@item.Ratings', '@item.AppointmentId') </script>
+                                        </td>
+                                        <td>@item.Comments</td>
+                                    </tr>
+                                
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JS Libraies -->
+<script src="assets/bundles/apexcharts/apexcharts.min.js"></script>
+<!-- Page Specific JS File -->
+<script src="assets/js/page/index.js"></script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $('#exampleModal').appendTo("body");
+    $("#mechanicDashboard").addClass('active');
+</script>

@@ -1,0 +1,127 @@
+﻿
+@model Dal.Models.GarageImages
+@{
+}
+
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 style="color:dimgray;font-style:italic">Manage Garage Images</h3>
+            </div>
+            <hr />
+            <div class="card-body">
+                <div class="row row-cols-3 ">
+                    @for (int i = 0; i < ViewBag.img.Count; i++)
+                    {
+                        <div class="col mb-5">
+                            <div class="card h-90">
+
+                                <img class="card-img-top" src="~/Garage/Gallery/@ViewBag.img[i].ImageUrl" alt="Card image" style="width:100%">
+                                <a class="btn btn-primary px-3 w-100 deleteMenu" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                   routeId="@ViewBag.img[i].ImageId" style="background-color:red;">Delete</a>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+                <hr style="background-color:dimgray" />
+                <div class="">
+                    <form method="post" enctype="multipart/form-data" class="createNewAccount" autocomplete="off">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <label asp-for="GalleryFiles" class="control-label">Upload New Garage Images</label>
+                                <div class="custom-file mb-3">
+                                    <input asp-for="GalleryFiles" class="custom-file-input" id="customFile" multiple>
+                                    <label class="custom-file-label" for="customFile">Choose your garage pictures</label>
+                                </div>
+                                <span asp-validation-for="GalleryFiles" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn submitButton text-light rounded-pill" asp-route-id="@ViewBag.Id" id="registerButton" style="background-color: #6677ef !important"
+                                    type="submit">
+                                Save
+                            </button>
+                        </div>
+
+
+
+                        @section Scripts{
+                            <script>
+                                // Add the following code if you want the name of the file appear on select
+                                $(".custom-file-input").on("change", function () {
+                                    //var fileName = $(this).val().split("\\").pop();
+                                    //$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+                                    var fileLabel = $(this).next('.custom-file-label');
+                                    var files = $(this)[0].files;
+                                    if (files.length > 1) {
+                                        fileLabel.html(files.length + " files selected");
+                                    }
+                                    else if (files.length == 1) {
+                                        fileLabel.html(files[0].name);
+                                    }
+                                });
+                            </script>
+                            <script>
+                                $('#exampleModal').appendTo("body"); // I ADDED THIS SO THAT NO MORE MODAL BACKDROP OCCURS.
+                                                var i;
+                                                $(document).on('click', '.deleteMenu', function () {
+                                                    i = parseInt($(this).attr("routeId"));
+                                                    console.log(i);
+                                                });
+                                                $(document).on('click', '#del1', function() {
+                                                    console.log(i);
+                                                    $('.modal-backdrop').remove();
+                                                    $.ajax({
+                                                    url: '@Url.Action("DeleteGarageImage", "Garage")',
+                                                    type: 'post',
+                                                    data: { id: i},
+
+                                                    success: function(resp) {
+                                                        $('body').removeClass('modal-open'); //remove modal-open from body in case you see faded background
+                                                        $('.modal-backdrop').remove();       // remove modal-backdrop at the end of page in case you see faded background
+                                                        location.reload();
+                                                    },
+                                                    error: function(err) {
+                                                        alert("Error while inserting data");
+                                                    }
+
+                                                    });
+
+                                                });
+                            </script>
+                        }
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color:white;border:1px solid white;">&#10006;</button>
+            </div>
+            <div class="modal-body">
+                <form action="" onsubmit="">
+                    <p class="mb-3 clrr">Are You sure you want to delete this Image?</p>
+                    <button type="button" id="del1" class="mt-2 reschedule-btn rounded-pill bll text-light px-3 pdd">
+                        Yes
+                    </button>
+                    <button type="button" class="btn btn-secondary rounded-pill bll text-light px-3 pdd" data-bs-dismiss="modal">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

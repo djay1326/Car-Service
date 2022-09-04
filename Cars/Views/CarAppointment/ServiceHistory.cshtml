@@ -1,0 +1,113 @@
+﻿
+@model IEnumerable<Dal.Models.CarAppointment>
+@{
+}
+<head>
+    <link href="~/css/manage.css" rel="stylesheet" />
+    <style>
+        .searchBtn1 {
+            padding: 0px 15px;
+            background-color: #1fb6ff;
+            border: none;
+            min-width: 84px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Get Service History</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <form method="post" id="xyz" class="overflow-hidden" asp-controller="CarAppointment" asp-action="ServiceHistory">
+                        <ul class="inputBlock1 mb-5 d-flex justify-content-center">
+                            <li>
+                                <input type="text" class="blockb2 gapp4 h-100 da" name="anytext" value="@ViewBag.anytext" id="username" pla />
+                            </li>
+
+                            <li>
+                                <button type="submit" class="text-white gapp searchBtn1 h-100 mb-3" style="background: #6777EF" id="searchBtn"> Search </button>
+                            </li>
+                            @*<li>
+                                    <a asp-controller="CarAppointment" asp-action="CustomersServices">
+                                        <button type="button" id="abc" class="gapp clearBtn h-100 mb-3">Clear</button>
+                                    </a>
+                            </li>*@
+
+                        </ul>
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            <table class="table table-hover mb-0 overflow-hidden" id="tab1">
+                                <thead>
+                                    <tr class="vw-100">
+                                        <th>#</th>
+                                        <th width="300">Garage Details</th>
+                                        <th width="200">Created Date</th>
+                                        <th width="300">Work</th>
+                                        <th>Total Cost</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td scope="row" class="font-weight-600">@item.Id</td>
+                                            <td>
+                                                <a href="#" class="text-decoration-none">
+                                                    <p class="m-0">
+                                                        <span>
+                                                            <span class="font-weight-600">@item.GarageName</span> <br />
+                                                            @item.AddressLine1 ,@item.AddressLine2 <br />
+                                                            @item.City -  @item.PostalCode        <br />
+                                                            @item.State
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </td>
+                                            <td scope="row" class="font-weight-600">@item.AppointmentAcceptDate.Value.ToShortDateString()</td>
+                                            <td scope="row">
+                                                @*@for(int i = 0; i < ViewBag.Data.Count; i++)
+                                                    {
+                                                        @ViewBag.Data[i].WorkDone
+                                                    }*@
+                                                @foreach (var x in item.WorkDone)
+                                                {
+                                                    <span class="font-weight-600">@x.Work =><span class="font-weight-light">@x.Price</span></span><br />
+                                                }
+                                            </td>
+                                            <td scope="row" class="font-weight-600">
+                                                @item.Total_Cost
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot class="d-none">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Garage Details</th>
+                                        <th>Created Date</th>
+                                        <th>Work</th>
+                                        <th>Total Cost</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        }
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $("#myServiceHistory").addClass('active');
+
+</script>

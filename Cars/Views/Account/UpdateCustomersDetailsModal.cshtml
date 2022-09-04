@@ -1,0 +1,124 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Dal.Models.Users
+@{
+    Layout = null;
+}
+
+
+<form method="post" enctype="multipart/form-data" class="createNewAccount w-100" autocomplete="off">
+    @*<div asp-validation-summary="All" class="text-danger"></div>*@
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+                <label>Name:</label>
+                <input type="text" asp-for="Name" placeholder="First name" class="bdrheight form-control" id="value1" required>
+                <span asp-validation-for="Name" class="text-danger" id="fullName"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+                <label>Email:</label>
+                <input type="email" asp-for="Email" placeholder="Email Address" class="bdrheight form-control" id="value2" required>
+                <span asp-validation-for="Email" class="text-danger" id="myEmail"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+                <label>Phone Number:</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">+91</span>
+                    <input type="text" class="form-control bdrheight" asp-for="PhoneNumber" placeholder="Mobile number" aria-label="Username" aria-describedby="basic-addon1" id="value3" required>
+                    <span asp-validation-for="PhoneNumber" class="text-danger" id="mobileNo"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+                <label>Address Line 1:</label>
+                <input type="text" asp-for="AddressLine1" placeholder="Address Line 1 " class="bdrheight form-control" id="value4" required>
+                <span asp-validation-for="AddressLine1" class="text-danger" id="addressLine1"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+
+                <label>Address Line 2:</label>
+                <input type="text" asp-for="AddressLine2" placeholder="Address Line 2" class="bdrheight form-control" id="value5">
+                <span asp-validation-for="AddressLine2" class="text-danger"></span>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+                <label>City:</label>
+                <input type="text" asp-for="City" placeholder="Enter City" class="bdrheight form-control" id="value6" required>
+                <span asp-validation-for="City" class="text-danger" id="myCity"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+
+                <label>State:</label>
+                <input type="text" asp-for="State" placeholder="Enter State" class="bdrheight form-control" id="value7" required>
+
+                <span asp-validation-for="State" class="text-danger" id="myState"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="w-100 mb-3">
+            <div class="form-group d-flex flex-column">
+                <label>Postal Code:</label>
+                <input type="text" asp-for="PostalCode" placeholder="Enter Postal Code" id="value8" class="bdrheight form-control" required>
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <!--<div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="form-group d-flex flex-column">
+                <div class="custom-file">
+                    <label>Profile Image:</label>
+                    <input asp-for="CoverPhoto" type="file" class="custom-file-input" id="customFile">-->
+    @*We Don't need type="file" bcoz we have already made it IFormFile so it will consider it automatically*@
+    <!--<label class="custom-file-label" for="customFile">Choose profile picture</label>
+                </div>
+                <span asp-validation-for="CoverPhoto" class="text-danger"></span>
+            </div>
+        </div>
+    </div>-->
+    <div class="d-none">
+        <input type="number" asp-for="Id" id="value9" />
+    </div>
+    <div class="text-center mt-4">
+        <button class="btn submitButton text-light rounded-pill" id="editButton" type="button">Edit</button>
+        @*<button class="btn submitButton text-light rounded-pill" asp-route-id="@ViewBag.UserId" type="button" id="updateBtns" style="background-color: #6677ef !important;">Update</button>*@
+
+    </div>
+    @section Scripts{
+        
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+    }
+</form>
+
+

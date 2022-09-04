@@ -1,0 +1,140 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<Dal.Models.Garage>
+@*@model IEnumerable<Dal.GarageAndGarageImagesCustomModel>*@
+@{
+    var value = 0;
+    var IntegerAverage = 0;
+    float totalAverage = 0;
+}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+
+</head>
+
+<h2 style="color:dimgray">Available Garages</h2>
+<hr style="background-color: darkgray;" />
+<div class="row row-cols-3 ">
+    <script>
+        function StarRating(rate, id) {
+            console.log(rate);
+            console.log(typeof (parseFloat(rate)));
+            console.log(parseFloat(rate).toFixed(1));
+            let allStars = "#rateGarage_" + id;
+            console.log("#rateGarage_" + id);
+            //$('#rateGarage_' + id).html("hello");
+            $('#rateGarage_' + id).rateYo({
+
+                rating: parseFloat(rate).toFixed(1),
+                starWidth: "20px",
+                readOnly: true
+            }
+            );
+        };
+    </script>
+    @foreach (var item in Model)
+    {
+        <div class="col mb-5">
+            <div class="card h-100">
+
+                <img class="card-img-top" src="~/Garage/Gallery/@item.ImageURL" alt="Card image" style="width:100%">
+
+                <div class="card-body" style="margin-bottom:-5px;">
+                    <h3 class="card-title font-weight-bold">@item.GarageName</h3>
+                    <p class="card-text"><span class="font-weight-bold">Address : </span>@item.AddressLine1, &nbsp;@item.AddressLine2,&nbsp;@item.City&nbsp;-@item.PostalCode<br />@item.State</p>
+                    <span class="card-text">
+                        <span class="font-weight-600">Garage Ratings:</span>
+                        @*@{
+                                var avg = 0;
+                            }
+                            @foreach(var x in item.GarageRatings)
+                            {
+
+                                //avg = (int)x.Ratings;
+                                value = x.Ratings ?? 0;
+                                avg = avg + value;
+                                //var IntegerAverage = (int)avg;
+                            }
+                            @{
+                                totalAverage = avg / item.GarageRatings.Count();
+                                IntegerAverage = (int)totalAverage;
+
+                            }*@
+                        <div id="rateGarage_@item.GarageId"></div> @*========> This @item.Id is just to make Id unique each time for loop is called so.........*@
+                        <script>StarRating('@item.GarageRatings', '@item.GarageId') </script>
+                    </span>
+                </div>
+                <div class="card-footer">
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <a asp-controller="Garage" asp-action="ViewGarageDetails" asp-route-id="@item.GarageId" class="btn btn-primary px-3" style="background-color:red;">See Profile</a>
+                        <a asp-controller="CarAppointment" asp-action="CustomerMakesAppointment" asp-route-id="@item.GarageId" class="btn btn-primary ml-1" style="background-color:green;">Book Appointment</a>
+
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a asp-controller="Garage" asp-action="ViewGarageDetails" asp-route-id="@item.GarageId" class="btn btn-primary px-3 " style="background-color:red;">See Profile</a>
+                            </div>
+                            @if (item.IsActive == true)
+                            {
+                                <div class="col-md-6">
+                                    <a asp-controller="Garage" asp-action="UpdateGarageActiveness" asp-route-id="@item.GarageId" asp-route-status="false" class="btn btn-outline-dark ">
+                                        Inactivate
+                                    </a>
+                                </div>
+
+                            }
+                            @if (item.IsActive == false)
+                            {
+                                <div class="col-md-6">
+                                    <a asp-controller="Garage" asp-action="UpdateGarageActiveness" asp-route-id="@item.GarageId" asp-route-status="true" class="btn btn-outline-info ">
+                                        Activate
+                                    </a>
+                                </div>
+                            }
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $("#AllAvailableGarages").addClass('active');
+        $("#AllGaragesViewByAdmin").addClass('active');
+    </script>
+
+
+
+    @*<div class="col h-100">
+        <div class="card">*@
+    @*<img class="card-img-top" src="../bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">*@
+    <!--<div class="card-body">
+                <h4 class="card-title">John Doe</h4>
+                <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+                <a href="#" class="btn btn-primary">See Profile</a>
+            </div>
+        </div>
+    </div>-->
+
+
+</div>
+
+
+
+@*<div class="">
+        <span id="intAvg" >@IntegerAverage</span>
+    </div>*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    /* $(document*/
+</script>
+
+

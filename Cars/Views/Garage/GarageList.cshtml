@@ -1,0 +1,467 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Dal.Models
+@inject SignInManager<Users> signInManager
+@*@model PaginatedList<project.Models.leave>*@
+@*@model IEnumerable<project.Models.leave>*@
+@model IEnumerable<Dal.Models.Garage>
+@{
+
+}
+<head>
+    <style>
+        .activee {
+            color: white;
+            background-color: #67b644;
+            padding: 5px 14px;
+        }
+
+        .inActivee {
+            color: white;
+            background-color: #ff6b6b;
+            padding: 5px 10px;
+        }
+
+        .xyz {
+            background-color: darkgray !important;
+        }
+
+        .submitButton1 {
+            min-width: 130px;
+            padding: 7px 16px !important;
+            background-color: #6677ef !important;
+        }
+
+        .ht {
+            min-height: 46px;
+            padding: 10px;
+        }
+
+        .bdr2 {
+            border: 1px solid #e1e1e1;
+            color: #646464;
+        }
+
+        label {
+            color: #646464;
+        }
+
+        .bld {
+            font-weight: 550;
+        }
+
+        .updateBtn {
+            color: white;
+            background-color: #6777EF;
+        }
+
+        .refundUp {
+            color: white;
+            background-color: #1fb6ff;
+        }
+
+        .def {
+            background-color: white !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script>
+        function StarRating(rate, id) {
+            console.log(rate);
+            console.log(typeof (parseFloat(rate)));
+            console.log(parseFloat(rate).toFixed(1));
+            let allStars = "#rateGarage_" + id;
+            console.log("#rateGarage_" + id);
+            //$('#rateGarage_' + id).html("hello");
+            $('#rateGarage_' + id).rateYo({
+
+                rating: parseFloat(rate).toFixed(1),
+                starWidth: "20px",
+                readOnly: true
+            }
+            );
+        };
+    </script>
+</head>
+
+<div class="managee d-flex justify-content-between mb-2">
+    <h1 class="m-0">My Garages</h1>
+    @if (User.IsInRole("Mechanic"))
+    {
+        <a asp-controller="Garage" asp-action="AddGarage" asp-route-id="@ViewBag.Id" role="button" class="text-white text-decoration-none"
+           style="background: #6777EF;border-radius:15px;margin-top:12px;padding:10px;">
+            <img src="~/images/addNew.png" alt="" height="16" width="16">
+            <span class="ms-1">Add New Garage</span>
+        </a>
+    }
+
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>All Garages</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <form method="post" asp-controller="" asp-action="" id="xyz" class="overflow-hidden">
+
+                        <table class="table table-hover mb-0 overflow-hidden" id="tab1">
+                            <thead>
+                                <tr class="vw-100">
+                                    <th>#</th>
+                                    <th>Garage Name</th>
+                                    <th>Address</th>
+                                    <th>Garage Timings</th>
+                                    <th>Ratings</th>
+                                    <th>Services available</th>
+                                    <th>Status</th>
+                                    <th width="100">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td scope="row" class="font-weight-600">@item.GarageId</td>
+                                        <td scope="row" class="font-weight-600">@item.GarageName</td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none">
+                                                @*<p class="m-0">@item.AddressLine1&nbsp; @item.AddressLine2</p>*@
+                                                <p class="m-0">
+                                                    <img src="~/images/home.png" alt="" height="19" width="16">
+                                                    <span>
+                                                        @item.AddressLine1 ,@item.AddressLine2 <br />
+                                                        @item.City -  @item.PostalCode        <br />
+                                                        @item.State
+                                                    </span>
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="#servicesPop" data-toggle="modal" class="d-flex text-decoration-none">
+                                                @*<img src="~/images/clock.png" alt="" height="19" width="16">*@
+                                                <p class="m-0">Opening Time : @item.OpenTime</p>
+                                            </a>
+                                            <a href="#servicesPop" data-toggle="modal" class="d-flex text-decoration-none">
+                                                @*<img src="~/images/clock.png" alt="" height="19" width="16">*@
+                                                <p class="m-0">Closing Time : @item.CloseTime</p>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div id="rateGarage_@item.GarageId"></div> @*========> This @item.Id is just to make Id unique each time for loop is called so.........*@
+                                            <script>StarRating('@item.GarageRatings', '@item.GarageId') </script>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none getServices" routeId="@item.GarageId" style="color:blue;cursor:pointer">Check Services</a>
+                                            @*<p class="m-0 text-center">@item.SubTotal $</p>*@
+                                        </td>
+                                        <td>
+                                            @if (item.IsActive == true)
+                                            {
+                                                <p class="m-0 text-center activee">Active</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="m-0 text-center inActivee">Inactive</p>
+                                            }
+
+                                        </td>
+                                        <td class="text-center main-btn">
+                                            <a asp-controller="Garage" asp-action="UploadMultipleImages" asp-route-id="@item.GarageId">
+                                                <img src="~/assets/img/pic.png" class="uploadImages mt-2" title="Upload Garage Images" alt="" height="29" width="22" />
+                                            </a>
+                                            <a role="button">
+                                                <img src="~/assets/img/edit-icon.png" routeId="@item.GarageId" class="updateDetails" title="Edit" alt="" height="22" width="22" />
+                                            </a>
+                                            <a href="#deleteAdressModal" data-bs-toggle="modal" role="button" routeId="@item.GarageId" class="deleteMenu">
+                                                <img src="~/assets/img/delete-icon.png" title="Delete" alt="" height="22" width="22">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="d-none">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Garage Name</th>
+                                    <th>Address</th>
+                                    <th>Garage Timings</th>
+                                    <th>Ratings</th>
+                                    <th>Services available</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        @*@{
+                                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                            }
+
+                            <a asp-action="leavepage" asp-controller="Starting"
+                               asp-route-pageNumber="@(Model.PageIndex - 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               class="align-items-end btn btn-default btn-outline-primary mt-3 @prevDisabled">
+                                Previous
+                            </a>
+                            <a asp-action="leavepage" asp-controller="Starting"
+                               asp-route-pageNumber="@(Model.PageIndex + 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               class=" btn btn-default btn-outline-primary mt-3 @nextDisabled">
+                                Next
+                            </a>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ------------------------Display Services PopUp Modal---------------------------- -->
+<div class="modal fade" id="displayAddressModal" aria-hidden="true" aria-labelledby="deleteAdressModalLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title me-3 clrr" id="deleteAdressModalLabel2">List of Services Offered:</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    &times;
+                    @*<span aria-hidden="true">&times;</span>*@
+                </button>
+            </div>
+            <div class="modal-body">
+                @*<table class="table table-hover mb-0 overflow-hidden" id="tab1">
+                            <thead>
+                                <tr class="vw-100">
+                                    <th>#</th>
+                                    <th>Holiday</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>*@
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ------------------------Delete Garage PopUp Modal---------------------------- -->
+<div class="modal fade" id="deleteAdressModal" aria-hidden="true" aria-labelledby="deleteAdressModalLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title me-3 clrr" id="deleteAdressModalLabel2">Delete Address</h4>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    @*<span aria-hidden="true">&times;</span>*@
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" onsubmit="">
+                    <p class="mb-3 clrr">Are You sure you want to delete this Leave Request?</p>
+                    <button type="button" id="del1" class="mt-2 reschedule-btn rounded-pill bll text-light px-3 pdd">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ......................................Garage Details Edit Popup Modal...................................-->
+<div class="modal fade align-items-center justify-content-center" id="editAddressModal" aria-hidden="true" aria-labelledby="editReschedule" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered vertical-align-center">
+        <div class="modal-content" style="width:90%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editReschedule">Leave Request</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" style="background-color:white;border:none;">&times;</button>
+            </div>
+            <div class="modal-body d-flex editRescheduleModal p-4">
+                @*<form method="post" class="col-sm-12">
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <div class="form-group d-flex flex-column">
+                                    <label for="editDateModal" class="control-label fw-bold">From Date</label>
+                                    <input type="date" value="23/12/2021"  class="ht bdr2">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group d-flex flex-column">
+                                    <label for="editDateModal" class="control-label fw-bold">To Date</label>
+                                    <input type="date" value="23/12/2021"  class="ht bdr2">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group d-flex flex-column mb-3">
+                            <label for="reasonScheduleEdit" class="fw-bold">Reason for Leave</label>
+                            <textarea rows="3" maxlength="500" placeholder="Reason for Leave?" class="bdr2 p-2"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn updateBtn w-100">Save</button>
+                    </form>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--General JS Scripts -->
+<script src="~/assets/js/app.min.js"></script>
+<!-- Template JS File -->
+<script src="~/assets/js/scripts.js"></script>
+<!-- Custom JS File -->
+<script src="~/assets/js/custom.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $("#myGarages").addClass('active');
+
+</script>
+
+<script>
+        $('#displayAddressModal').appendTo("body");
+        $(document).on('click', '.getServices', function () {
+            var value = parseInt($(this).attr("routeId"));
+            $.ajax({
+            url: '@Url.Action("GetServicesModal", "Garage")',
+            type: 'GET',
+            contentType: 'application/html; charset=utf-8',
+            dataType: 'html',
+            data: { id: value },
+            //contentType: 'application/html',
+
+            success: function (resp) {
+                console.log(resp);
+                $("#displayAddressModal .modal-body").html(resp);
+                $("#displayAddressModal").modal('show');
+                //$('.modal-backdrop').remove();
+            },
+            error: function (err) {
+                console.log(err);
+                alert("Error while inserting data");
+            }
+
+        });
+        });
+</script>
+
+<script>
+   
+    $('#editAddressModal').appendTo("body");
+        $(document).on('click', '.updateDetails', function () {
+            var values = parseInt($(this).attr("routeId"));
+            console.log('clicked');
+             $.ajax({
+                    url: '@Url.Action("UpdateGarageDetailsModal", "Garage")',
+                    type: 'get',
+                    dataType: 'html',
+                    contentType: 'application/html',
+                    data: { id: values },
+
+                    success: function(resp) {
+                        $("#editAddressModal .modal-body").html(resp);
+                        $("#editAddressModal").modal('show');
+                        //$('.modal-backdrop').remove();
+                    },
+                    error: function(err) {
+                        alert("Error while fetching data");
+                    }
+             });
+        });
+</script>
+
+<script>
+        $(document).on('click', "#updateBtns", function () {
+            var update = {};
+            update.GarageId = parseInt($(".getServices").attr("routeId"));
+            update.GarageName = $("#value1").val();
+            update.AddressLine1 = $("#value2").val();
+            update.AddressLine2 = $("#value3").val();
+            update.City = $("#value4").val();
+            update.State = $("#value5").val();
+            update.PostalCode = $("#value6").val();
+            update.Open = $("#value7").val();
+            update.Close = $("#value8").val();
+
+            update.ServiceCharge = parseInt($("#data1").val());
+            update.KeyRegistration = parseInt($("#data2").val());
+            update.WashAndClean = parseInt($("#data3").val());
+            update.WheelAlignment = parseInt($("#data4").val());
+            update.WheelBalancing = parseInt($("#data5").val());
+            update.PickupAndDrop = parseInt($("#data6").val());
+            update.PickupOrDrop = parseInt($("#data7").val());
+            update.OneSidePickOrDrop = parseInt($("#data8").val());
+            update.BodyClean = parseInt($("#data9").val());
+
+
+            console.log(update);
+
+            $.ajax({
+                url: '@Url.Action("UpdateGarageDetails","Garage")',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify(update),
+                success: function(resp) {
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    alert("Garage Details Updated");
+                    location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                    alert("Error while inserting data");
+                }
+
+
+            });
+        });
+</script>
+
+<script>
+    $('#deleteAdressModal').appendTo("body");   // I ADDED THIS SO THAT NO MORE MODAL BACKDROP OCCURS.
+        var i;
+        $(document).on('click', '.deleteMenu', function() {
+        i = parseInt($(this).attr("routeId"));
+        console.log(i);
+         });
+
+
+        $(document).on('click', '#del1', function() {
+        console.log(i);
+
+        $.ajax({
+        url: '@Url.Action("DeleteGarage", "Garage")',
+        type: 'post',
+        data: { id: i},
+
+        success: function(resp) {
+            $('body').removeClass('modal-open'); //remove modal-open from body in case you see faded background
+            $('.modal-backdrop').remove();       // remove modal-backdrop at the end of page in case you see faded background
+            location.reload();
+        },
+        error: function(err) {
+            alert("Error while inserting data");
+        }
+
+        });
+
+    });
+</script>
+

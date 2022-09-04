@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{      if (User.IsInRole("Admin"))
+            {
+
+            }
+            else
+            {
+                Layout = null;
+            }
+    
+}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+</head>
+<form method="post" asp-controller="Account" asp-action="Redirection">
+    <div class="d-flex justify-content-center mt-5">
+        <label for="" class="control-label mr-3">
+            Create an Account for ?
+        </label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+            <label class="form-check-label" for="inlineRadio1">Mechanic</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+            <label class="form-check-label" for="inlineRadio2">Customer</label>
+        </div>
+        <button type="submit" class="submitbtn btn btn-primary">Redirect</button>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+@*<script>
+    $(document).on('click','.submitbtn',function () {
+        //$("input[name$='inlineRadioOptions']").click(function () {
+            var value = $("input[name$='inlineRadioOptions']").val();
+            if (value == 1) {
+                window.location.href = '@Url.Action("mechanicRegister", "Starting")';
+            }
+            else if (value == 2) {
+                window.location.href = '@Url.Action("smallDisplay", "Starting")';
+            }
+
+        //});
+    });
+</script>*@

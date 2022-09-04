@@ -1,0 +1,317 @@
+﻿
+@model IEnumerable<Dal.Models.Users>
+@{
+}
+<head>
+    <link href="~/css/manage.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script>
+        function StarRating(rate, id) {
+            console.log(rate);
+            console.log(typeof (parseFloat(rate)));
+            console.log(parseFloat(rate).toFixed(1));
+            let allStars = "#rateGarage_" + id;
+            console.log("#rateGarage_" + id);
+            //$('#rateGarage_' + id).html("hello");
+            $('#rateGarage_' + id).rateYo({
+
+                rating: parseFloat(rate).toFixed(1),
+                starWidth: "20px",
+                readOnly: true
+            }
+            );
+        };
+    </script>
+</head>
+<div class="d-flex justify-content-end">
+    <a asp-controller="Account" asp-action="Redirection" role="button" class="text-white text-decoration-none" style="background-color:olivedrab;border-radius:15px;margin-bottom:10px;padding:10px;">
+        <img src="~/images/addNew.png" alt="" height="16" width="16">
+        <span class="ms-1">Add New Users</span>
+    </a>
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>All Customers</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <form method="post" id="xyz" class="overflow-hidden" asp-controller="Account" asp-action="CustomersOfAdmin">
+                        <ul class="inputBlock1 mb-2 d-flex justify-content-center">
+                            @*<li>
+                                    <input type="text" class="blockb2 gapp4 h-100 da" name="anytext" value="@ViewBag.anytext" id="username" />
+                                </li>*@
+                            <li>
+                                <select name="userroleids" id="selectedUserRole" class="blockb1 gapp h-100 da">
+                                    <option disabled selected>Filter Users By</option>
+                                    <option value="100">All</option>
+                                    <option value="3">Customer</option>
+                                    <option value="2">Mechanic</option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <button type="submit" class="text-white gapp searchBtn h-90 mb-3" style="background: #6777EF" id="searchBtn"> Search </button>
+                            </li>
+                            <li>
+                                <a asp-controller="Account" asp-action="CustomersOfAdmin">
+                                    <button type="button" id="abc" class="gapp clearBtn h-90 mb-3">Clear</button>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <table class="table table-hover mb-0 overflow-hidden" id="tab1" style="margin-top:70px;">
+                            <thead>
+                                <tr class="vw-100">
+                                    <th>#</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Details</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td scope="row" class="font-weight-600">@item.Id</td>
+                                        <td scope="row" class="font-weight-600">@item.Name</td>
+                                        <td scope="row" class="font-weight-600">
+                                            @item.AddressLine1, @item.AddressLine2<br />
+                                            @item.City - @item.State<br />
+                                            @item.UserName<br />
+                                            @item.PhoneNumber
+                                        </td>
+                                        <td>
+                                            <a role="button">
+                                                <img src="~/assets/img/edit-icon.png" routeId="@item.Id" class="updateDetails" title="Edit" alt="" height="22" width="22" />
+                                            </a>
+                                            <a data-bs-toggle="modal" data-bs-target="#exampleModal" routeId="@item.Id" role="button" class="deleteMenu">
+                                                <img src="~/assets/img/delete-icon.png" title="Delete" alt="" height="22" width="22">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="d-none">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Details</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- .............................................. User Details Edit Popup Modal ......................................-->
+<div class="modal fade align-items-center justify-content-center" id="editAddressModal" aria-hidden="true" aria-labelledby="editReschedule" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered vertical-align-center">
+        <div class="modal-content" style="width:90%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editReschedule">Edit Customers Details</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" style="background-color:white;border:none;">&times;</button>
+            </div>
+            <div class="modal-body d-flex editRescheduleModal p-4">
+                @*<form method="post" class="col-sm-12">
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <div class="form-group d-flex flex-column">
+                                    <label for="editDateModal" class="control-label fw-bold">From Date</label>
+                                    <input type="date" value="23/12/2021"  class="ht bdr2">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group d-flex flex-column">
+                                    <label for="editDateModal" class="control-label fw-bold">To Date</label>
+                                    <input type="date" value="23/12/2021"  class="ht bdr2">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group d-flex flex-column mb-3">
+                            <label for="reasonScheduleEdit" class="fw-bold">Reason for Leave</label>
+                            <textarea rows="3" maxlength="500" placeholder="Reason for Leave?" class="bdr2 p-2"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn updateBtn w-100">Save</button>
+                    </form>*@
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================================================  Delete Modal==================================================== -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color:white;border:1px solid white;">&#10006;</button>
+            </div>
+            <div class="modal-body">
+                <form action="" onsubmit="">
+                    <p class="mb-3 clrr">Are You sure you want to delete this Image?</p>
+                    <button type="button" id="del1" class="mt-2 reschedule-btn rounded-pill bll text-light px-3 pdd">
+                        Yes
+                    </button>
+                    <button type="button" class="btn btn-secondary rounded-pill bll text-light px-3 pdd" data-bs-dismiss="modal">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    var x = parseInt(@ViewBag.status);
+    $('#status').val(x);
+
+    var y = parseInt(@ViewBag.selectedUserRole);
+    $("#selectedUserRole").val(y);
+
+    $('#exampleModal').appendTo("body");
+    $("#AllCustomersViewByAdmin").addClass('active');
+</script>
+
+<script>
+        $('#editAddressModal').appendTo("body");
+        $(document).on('click', '.updateDetails', function () {
+            var values = parseInt($(this).attr("routeId"));
+            console.log(values);
+             $.ajax({
+                    url: '@Url.Action("UpdateCustomersDetailsModal", "Account")',
+                    type: 'get',
+                    dataType: 'html',
+                    contentType: 'application/html',
+                    data: { id: values },
+
+                    success: function(resp) {
+                        $("#editAddressModal .modal-body").html(resp);
+                        $("#editAddressModal").modal('show');
+                        //$('.modal-backdrop').remove();
+                    },
+                    error: function(err) {
+                        alert("Error while fetching data");
+                    }
+             });
+        });
+</script>
+
+<script>
+    $(document).on('click', "#editButton", function () {
+        var update = {};
+        update.Id = parseInt($("#value9").val());
+        update.Name = $("#value1").val();
+        update.Email = $("#value2").val();
+        update.PhoneNumber = $("#value3").val();
+        update.AddressLine1 = $("#value4").val();
+        update.AddressLine2 = $("#value5").val();
+        update.City = $("#value6").val();
+        update.State = $("#value7").val();
+        update.PostalCode = $("#value8").val();
+
+        update.UserName = $("#value2").val();
+        update.NormalizedUserName = $("#value2").val().toUpperCase();
+        update.NormalizedEmail = $("#value2").val().toUpperCase();
+        console.log(update);
+
+        if (update.Name == '') {
+            $("#fullName").html("Name value cannot be null");
+        }
+        else if (update.AddressLine1 == '') {
+            $("#addressLine1").html("AddressLine 1 cannot be null");
+        }
+        else if (update.Email == '') {
+            $("#myEmail").html("Email value cannot be null");
+        }
+        else if (update.City == '') {
+            $("#myCity").html("City value cannot be null");
+        }
+        else if (update.City != '') {
+            
+        }
+        else if (update.State == '') {
+            $("#myState").html("State value cannot be null");
+        }
+        else if (update.PhoneNumber == '') {
+            $("#mobileNo").html("Phone Number cannot be null");
+        }
+        else if (update.AddressLine1 == '' && update.City == '') {
+            $("#addressLine1").html("AddressLine 1 cannot be null");
+            $("#myCity").html("City value cannot be null");
+        }
+        else {
+            $("#fullName").hide();
+            $("#addressLine1").hide();
+            $("#myEmail").hide();
+            $("#myCity").hide();
+            $("#myState").hide();
+            $("#mobileNo").hide();
+            $.ajax({
+                url: '@Url.Action("UpdateCustomersDetails","Account")',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify(update),
+                success: function(resp) {
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    //alert("Customer Details Updated");
+                    location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                    alert("Error while inserting data");
+                }
+
+
+        });
+        }
+
+
+    });
+</script>
+
+<script>
+                                                var i;
+                                                $(document).on('click', '.deleteMenu', function () {
+                                                    i = parseInt($(this).attr("routeId"));
+                                                    console.log(i);
+                                                });
+                                                $(document).on('click', '#del1', function() {
+                                                    console.log(i);
+                                                    $('.modal-backdrop').remove();
+                                                    $.ajax({
+                                                    url: '@Url.Action("DeleteUserAccount", "Account")',
+                                                    type: 'post',
+                                                    data: { id: i},
+
+                                                    success: function(resp) {
+                                                        $('body').removeClass('modal-open'); //remove modal-open from body in case you see faded background
+                                                        $('.modal-backdrop').remove();       // remove modal-backdrop at the end of page in case you see faded background
+                                                        location.reload();
+                                                    },
+                                                    error: function(err) {
+                                                        alert("Error while inserting data");
+                                                    }
+
+                                                    });
+
+                                                });
+</script>
+
+

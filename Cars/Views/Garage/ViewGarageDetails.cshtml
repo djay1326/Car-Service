@@ -1,0 +1,121 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Dal.GarageAndGarageImagesCustomModel
+@{
+}
+
+<a asp-controller="Garage" asp-action="ListAllAvailableGaragesforCustomer">Back</a>
+<div class="container" style="margin-top:20px;">
+    <h3 class="" style="color:dimgray;font-style:italic">Garage details</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < ViewBag.listImages.Count; i++)
+                    {
+                        <div class="@(i==0 ? "carousel-item active" : "carousel-item")" data-bs-interval="2000">
+                            <img src="~/Garage/Gallery/@ViewBag.listImages[i].ImageUrl" class="d-block w-100" alt="...">
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>@Model.Garage.GarageName</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="label label-primary font-weight-bold">Address: </span>
+                    <span class="monospaced">
+                        @Model.Garage.AddressLine1,&nbsp;@Model.Garage.AddressLine2,<br />@Model.Garage.City - @Model.Garage.PostalCode
+                        <br />@Model.Garage.State.
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="label label-primary font-weight-bold">Opening Time: </span>
+                    <span class="monospaced">@Model.Garage.OpenTime</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="label label-primary font-weight-bold">Closing Time: </span>
+                    <span class="monospaced">@Model.Garage.CloseTime</span>
+                </div>
+            </div>
+
+
+            <hr />
+            <h5 style="color:dimgray;font-style:italic">Garage Services:</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><span class="font-weight-bold">Service Charges - </span> @Model.Garage.ServiceCharge</li>
+                <li class="list-group-item"><span class="font-weight-bold">Key Registration Charges - </span>@Model.Garage.KeyRegistration </li>
+                <li class="list-group-item"><span class="font-weight-bold">Vehicle Wash And Clean - </span>@Model.Garage.WashAndClean </li>
+                <li class="list-group-item"><span class="font-weight-bold">Wheel Alignment Charges - </span>@Model.Garage.WheelAlignment </li>
+                <li class="list-group-item"><span class="font-weight-bold">Wheel Balancing Charges - </span>@Model.Garage.WheelBalancing </li>
+                <li class="list-group-item"><span class="font-weight-bold">Pickup and Drop Charges- </span>@Model.Garage.PickupAndDrop </li>
+                <li class="list-group-item"><span class="font-weight-bold">Picup/Drop Charges - </span>@Model.Garage.PickupOrDrop </li>
+                <li class="list-group-item"><span class="font-weight-bold">One side Pickup or Drop Charges- </span>@Model.Garage.OneSidePickOrDrop </li>
+                <li class="list-group-item"><span class="font-weight-bold">Body Clean Charges - </span>@Model.Garage.BodyClean </li>
+            </ul>
+
+            @if (User.IsInRole("Customer"))
+            {
+                <div class="row">
+                    <div class="col-md-8">
+                        <a asp-controller="CarAppointment" asp-action="CustomerMakesAppointment" asp-route-id="@Model.Garage.GarageId" class="btn btn-outline-primary mt-5">
+                            Book Appointment
+                        </a>
+                    </div>
+                </div>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="row">
+                    @if (Model.Garage.IsActive == true)
+                    {
+                        <div class="col-md-8">
+                            <a asp-controller="Garage" asp-action="UpdateGarageActiveness" asp-route-id="@Model.Garage.GarageId" asp-route-status="false" class="btn btn-outline-info mt-5">
+                                Inactivate
+                            </a>
+                        </div>
+                    }
+                    @if (Model.Garage.IsActive == false)
+                    {
+                        <div class="col-md-8">
+                            <a asp-controller="Garage" asp-action="UpdateGarageActiveness" asp-route-id="@Model.Garage.GarageId" asp-route-status="true" class="btn btn-outline-dark mt-5">
+                                Activate
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+    </div>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $("#AllGaragesViewByAdmin").addClass('active');
+
+</script>

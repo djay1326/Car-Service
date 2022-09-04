@@ -1,0 +1,154 @@
+﻿
+@model IEnumerable<Dal.Models.CarAppointment>
+@{
+}
+
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>All Appointment Requests</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <form method="post" id="xyz" class="overflow-hidden">
+
+                        <table class="table table-hover mb-0 overflow-hidden" id="tab1">
+                            <thead>
+                                <tr class="vw-100">
+                                    <th>#</th>
+                                    <th>Customer Details</th>
+                                    <th>Car Details</th>
+                                    <th>Approx Cost</th>
+                                    <th>Garage Details</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td scope="row" class="font-weight-600">@item.Id</td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none">
+                                                <p class="m-0">
+                                                    <span>
+                                                        <span class="font-weight-600">@item.NameOfUser</span> <br />
+                                                        @item.UserAddressLine1 ,@item.UserAddressLine2 <br />
+                                                        @item.UserCity -  @item.UserPostalCode        <br />
+                                                        @item.UserState<br />
+                                                        @item.UserEmail<br />
+                                                        @item.UserPhoneNo
+                                                    </span>
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none">
+                                                <p class="m-0">
+
+                                                    @*<img src="~/images/home.png" alt="" height="19" width="16">*@
+                                                    <span>
+                                                        Manufacturer : @item.CarModel  <br />
+                                                        Model : @item.CarName  <br />
+                                                        Number : @item.CarNumber
+                                                    </span>
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td scope="row" class="font-weight-600">@item.ApproxCost</td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none">
+                                                <p class="m-0">
+                                                    <span>
+                                                        <span class="font-weight-600">@item.GarageName</span> <br />
+                                                        @item.AddressLine1 ,@item.AddressLine2 <br />
+                                                        @item.City -  @item.PostalCode        <br />
+                                                        @item.State
+                                                    </span>
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td scope="row">
+                                            @if (item.ServiceStatus == 1)
+                                            {
+                                                <span class="pending">Pending</span>
+                                            }
+                                            @if (item.ServiceStatus == 2)
+                                            {
+                                                <span class="completed">Accept</span>
+                                            }
+                                            @if (item.ServiceStatus == 3)
+                                            {
+                                                <span class="cancelled">Cancel</span>
+                                            }
+                                        </td>
+                                        <td class="text-center main-btn">
+                                            @if (item.ServiceStatus == 1)
+                                            {
+                                                <button type="button" class="btn dropDownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    &#8942
+                                                </button>
+                                            }
+
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.Id" asp-route-status="2" class="text-decoration-none">
+                                                        <button class="dropdown-item" type="button">Accept</button>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a asp-controller="CarAppointment" asp-action="UpdateAppointmentStatus" asp-route-id="@item.Id" asp-route-status="3" class="text-decoration-none">
+                                                        <button class="dropdown-item" type="button">Cancel</button>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="d-none">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Customer Details</th>
+                                    <th>Car Details</th>
+                                    <th>Approx Cost</th>
+                                    <th>Garage Details</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        @*@{
+                                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                            }
+
+                            <a asp-action="leavepage" asp-controller="Starting"
+                               asp-route-pageNumber="@(Model.PageIndex - 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               class="align-items-end btn btn-default btn-outline-primary mt-3 @prevDisabled">
+                                Previous
+                            </a>
+                            <a asp-action="leavepage" asp-controller="Starting"
+                               asp-route-pageNumber="@(Model.PageIndex + 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               class=" btn btn-default btn-outline-primary mt-3 @nextDisabled">
+                                Next
+                            </a>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $("#appointments").addClass('active');
+
+</script>

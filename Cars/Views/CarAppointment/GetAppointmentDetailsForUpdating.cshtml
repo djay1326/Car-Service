@@ -1,0 +1,368 @@
+﻿@model Dal.CustomModels.CarAppointmentAndGarageCustomModel
+@{
+    @*var abc = false;
+        @if (Model.CarAppointment.KeyRegistration != 0)
+        {
+            abc = true;
+        }*@
+    var serviceCharge = (Model.CarAppointment.ServiceCharge != 0 ? true : false);
+    var keyRegistration = (Model.CarAppointment.KeyRegistration != 0 ? true : false);
+    var washAndClean = (Model.CarAppointment.WashAndClean != 0 ? true : false);
+    var wheelAlignment = (Model.CarAppointment.WheelAlignment != 0 ? true : false);
+    var wheelBalancing = (Model.CarAppointment.WheelBalancing != 0 ? true : false);
+    var pickupandDrop = (Model.CarAppointment.PickupAndDrop != 0 ? true : false);
+    var pickorDrop = (Model.CarAppointment.PickupOrDrop != 0 ? true : false);
+    var onesidepickuporDrop = (Model.CarAppointment.OneSidePickOrDrop != 0 ? true : false);
+    var bodyclean = (Model.CarAppointment.BodyClean != 0 ? true : false);
+
+}
+
+
+<h4>Update Booked Appointment</h4>
+<hr style="background-color: darkgray;" />
+<form method="post" id="formData">
+    <div class="row">
+        <div class="mt-5 mb-3 col">
+            <span>Pickup the Appointment Date :</span>
+            <span>
+                <input type="datetime-local" asp-for="CarAppointment.AppointmentDate" id="appointmentDate" style="margin-left:20px;" />
+                <input type="hidden" value="@ViewBag.GarageId" id="idOfGarage" />
+                <input type="hidden" value="@ViewBag.Id" id="appointmentId" />
+            </span>
+        </div>
+        @*<select asp-for="Country" class="form-control" asp-items="@(new SelectList(ViewBag.country,"Id","Name"))">
+            </select>*@
+        <div class="form-group col mt-5 mb-3">
+            <span>Select Manufacturer :</span>
+            <select id="selectManufacturer" asp-for="CarAppointment.CarManufacturerId" style="width:200px;height:30px; margin-left:20px" asp-items="@(new SelectList(@ViewBag.cars,"CarManufacturerId","NameOfCar"))">
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <span>Select Fuel Type :</span>
+            <select id="selectFuelType" asp-for="CarAppointment.CarFuelType" name="cars" style="width:200px;height:30px; margin-left:20px">
+                <option value="1">Petrol</option>
+                <option value="2">Diesel</option>
+            </select>
+        </div>
+        <div class="col mb-3">
+            <span>Enter Car Model Name :</span>
+            <input type="text" asp-for="CarAppointment.CarName" id="carName" style="width:200px;height:30px; margin-left:20px" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <span>Enter Car Number :</span>
+            <input type="text" asp-for="CarAppointment.CarNumber" id="carNumber" style="width:200px;height:30px; margin-left:20px" />
+        </div>
+    </div>
+    <hr style="background-color: darkgray;" />
+    <h5 class="">Select the Packages you want in your service:</h5>
+
+    @*<form>*@
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.ServiceCharge" id="checkServiceCharges" checked="@serviceCharge">
+                <label class="form-check-label" for="checkServiceCharges">
+                    Service Charges (Rs @Model.Garage.ServiceCharge)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.KeyRegistration" id="checkKeyRegisterCharges" checked=@keyRegistration>
+                <label class="form-check-label" for="checkKeyRegisterCharges">
+                    Key Registration Charges (Rs @Model.Garage.KeyRegistration)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.WashAndClean" id="checkVehicleWash" checked="@washAndClean">
+                <label class="form-check-label" for="checkVehicleWash">
+                    Vehicle Washing and Cleaning (Rs @Model.Garage.WashAndClean)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.WheelAlignment" id="checkWheelAlign" checked=@wheelAlignment>
+                <label class="form-check-label" for="checkWheelAlign">
+                    Wheel Alignment (Rs @Model.Garage.WheelAlignment)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.WheelBalancing" id="checkWheelBalance" checked=@wheelBalancing>
+                <label class="form-check-label" for="checkWheelBalance">
+                    Wheel Balancing (Rs @Model.Garage.WheelBalancing)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.PickupAndDrop" id="checkPickupandDrop" checked="@pickupandDrop">
+                <label class="form-check-label" for="checkPickupandDrop">
+                    Pickup and Drop (Rs @Model.Garage.PickupAndDrop)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.PickupOrDrop" id="checkPickuporDrop" checked=@pickorDrop>
+                <label class="form-check-label" for="checkPickuporDrop">
+                    Pickup/Drop (Rs @Model.Garage.PickupOrDrop)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.OneSidePickOrDrop" id="checkOneSidePickupOrDrop" checked=@onesidepickuporDrop>
+                <label class="form-check-label" for="checkOneSidePickupOrDrop">
+                    One Side Pickup or Drop (Rs @Model.Garage.OneSidePickOrDrop)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Garage.BodyClean" id="checkBodyClean" checked=@bodyclean>
+                <label class="form-check-label" for="checkBodyClean">
+                    Vehicle Body Cleaning (Rs @Model.Garage.BodyClean)
+                </label>
+            </div>
+        </div>
+    </div>
+    <hr style="background-color: lightgray;" />
+    <div class="d-flex mt-5">
+        <span class="font-weight-bold lead ml-auto">Approx Cost:</span>&nbsp;&nbsp;&nbsp;
+        @*<input type="number" id="totalCost" value="@Model.ServiceCharge">*@
+        <span id="totalCost" style="font-size:23px;" value="@ViewBag.approxCost"></span>
+    </div>
+
+    <button type="button" class="btn btn-success" id="bookAppointment">Update Booking</button>
+
+
+    @section Scripts{
+        @*<script>
+                var isChecked = $("#checkServiceCharges").is(':checked');
+                if (isChecked == true) {
+                    $("#Default2").addClass("ischecked");
+                }
+            </script>*@
+        @*<script>
+                $(document).on('change', 'input[type=checkbox]', function () {
+                    $('input[type=checkbox]').each(function () {
+                        let ischecked = $(this).prop('checked');
+                        console.log(ischecked);
+                        //if (ischecked == true) {
+                        //    $(this).attr('checked', true).val($(this).val());
+                        //}
+                        //else {
+                        //    $(this).attr('checked', false).val(0);
+                        //}
+
+                     });
+                });
+                var x = 0;
+                x = x + $('input[type=checkbox]').attr('checked', true).val();
+                console.log(x);
+            </script>*@
+        <script>
+            $('#bookAppointment').on('click', function () {
+                $('#formData input[type=checkbox]').each(function () {
+                    var ischecked = $(this).prop('checked');
+                    if (ischecked == false) {
+
+                        $(this).attr('checked', false).val(0);
+                    }
+                   // alert($(this).val());
+
+                });
+
+                var values = {};
+                values.Id = parseInt($("#appointmentId").val());
+                values.GarageId = parseInt($("#idOfGarage").val());
+                values.ApptDate = $("#appointmentDate").val();
+                values.ServiceCharge = parseInt($("#checkServiceCharges").val());
+                values.KeyRegistration = parseInt($("#checkKeyRegisterCharges").val());
+                values.WashAndClean = parseInt($("#checkVehicleWash").val());
+                values.WheelAlignment = parseInt($("#checkWheelAlign").val());
+                values.WheelBalancing = parseInt($("#checkWheelBalance").val());
+                values.PickupAndDrop = parseInt($("#checkPickupandDrop").val());
+                values.PickupOrDrop = parseInt($("#checkPickuporDrop").val());
+                values.OneSidePickOrDrop = parseInt($("#checkOneSidePickupOrDrop").val());
+                values.BodyClean = parseInt($("#checkBodyClean").val());
+                values.ApproxCost = parseInt($("#totalCost").val());
+
+                values.CarName = $("#carName").val();
+                values.CarNumber = $("#carNumber").val();
+                values.CarManufacturerId = parseInt($("#selectManufacturer option:selected").val());
+                values.CarModel = $("#selectManufacturer option:selected").text();
+                values.CarFuelType = parseInt($("#selectFuelType option:selected").val());
+                console.log(values);
+                $.ajax({
+                    url: '@Url.Action("UpdateBookedAppointment", "CarAppointment")',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(values),
+
+                    success: function(resp) {
+
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        alert("Appointment Updated");
+                        window.location.href = '@Url.Action("ListAllAppointmentsOfCustomer", "CarAppointment")';
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("Error while inserting data");
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                var totalCost = @ViewBag.approxCost;
+                $("#totalCost").html(totalCost);
+                $('#checkServiceCharges').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkKeyRegisterCharges').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkVehicleWash').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkWheelAlign').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkWheelBalance').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkPickupandDrop').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkPickuporDrop').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkOneSidePickupOrDrop').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkBodyClean').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+            });
+        </script>
+    }
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    
+    $("#AllAppointmentsOfMine").addClass('active');
+</script>

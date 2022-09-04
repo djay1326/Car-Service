@@ -1,0 +1,413 @@
+﻿
+@model IEnumerable<Dal.Models.ServiceWork>
+@{
+}
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+
+
+    <style>
+        .fontSize {
+            font-size: 18px;
+        }
+
+        .weight1 {
+            font-weight: 600;
+        }
+
+        .weight2 {
+            font-weight: 200;
+        }
+
+        .billTo {
+            padding: 10px 30px;
+            background-color: lightgray;
+        }
+        .backYellow {
+            background-color: yellow
+        }
+    </style>
+</head>
+
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card" id="invoiceContent">
+            <div class=" d-flex justify-content-center mt-5 mb-5">
+                <h3 class="font-weight-bold" style="color:dimgray">INVOICE</h3>
+            </div>
+            @*<hr style="background-color:darkgray"/>*@
+            <div class="row d-flex justify-content-around">
+                <div class="col-3">
+                    <span style="font-size:20px;font-style:italic;font-weight:bold">@ViewBag.GarageName</span><br />
+                    <span class="fontSize">@ViewBag.Add1,@ViewBag.Add2</span><br />
+                    <span class="fontSize">@ViewBag.GarageCity - @ViewBag.GaragePostal</span><br />
+                    <span class="fontSize">@ViewBag.GarageState</span><br />
+                    <span class="fontSize">Mobile:</span>
+                    <span class="fontSize" style="font-style:italic">989898989</span>
+                </div>
+                <div class="col-3">
+                    <div class="weight1 mb-3 mt-2">Invoice Id:<span class="weight2 ml-2">@ViewBag.InvoiceId</span></div>
+
+                    <div class="weight1 mb-3">Invoice Date:<span class="weight2 ml-2">@ViewBag.CreatedDate</span></div>
+
+                    <div class="weight1 mb-3">Customer Id:<span class="weight2 ml-2">@ViewBag.UserId</span></div>
+
+                    <div class="weight1 mb-2">
+                        Payment Status:
+                        <span class="weight2 ml-2">
+                            @if (ViewBag.payment == 2)
+                            {
+                                <span class="paid">Paid</span>
+                            }
+                            @if (ViewBag.payment == 1)
+                            {
+                                <span class="unpaid">Unpaid</span>
+                            }
+                        </span>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-4" style="margin-left:140px;">
+                    <div class="billTo text-center font-weight-bold">Billing Address</div>
+                    <span class="fontSize font-weight-600">Name:<span style="font-style:italic;">@ViewBag.Name</span><br /></span>
+                    <span class="fontSize"><span class="font-weight-600">Address:</span>@ViewBag.Address</span><br />
+                    <span class="fontSize">@ViewBag.City - @ViewBag.PostalCode</span><br />
+                    <span class="fontSize">@ViewBag.State</span><br />
+                    <span class="fontSize font-weight-600">Mobile:</span>
+                    <span class="fontSize" style="font-style:italic">@ViewBag.Mobile</span>
+                </div>
+            </div>
+
+
+            <div class="row mt-5">
+                <div class="col-9" style="margin-left:140px;">
+                    <table class="table table-striped table-bordered">
+                        <thead class="backYellow">
+                            <tr>
+                                <th width="80">No.</th>
+                                <th>DESCRIPTION</th>
+                                <th width="200">PRICE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.Data.Count; i++)
+                            {
+                                <tr>
+                                    <th>@(i+1)</th>
+                                    <th>@ViewBag.Data[i].Work </th>
+                                    <th class="allprice">@ViewBag.Data[i].Price</th>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row d-flex justify-content-end">
+                <div class="col-3 ">
+                    <span class="font-weight-600" style="font-size:20px;">Subtotal:<span class="ml-1" id="viewbagPrice"></span></span><br />
+                </div>
+            </div>
+            <div class="row d-flex justify-content-end">
+                <div class="col-3 ">
+                    <span class="font-weight-600" style="font-size:20px;">Tax:<span class="ml-1" id="viewbagTax"></span><span style="font-size:15px;">&nbsp;&nbsp;(@ViewBag.Tax%)</span></span>
+                </div>
+            </div>
+            <hr />
+            <div class="row d-flex justify-content-end mb-5">
+                <div class="col-3 ">
+                    <span class="font-weight-600" style="font-size:20px;">Total:<span class="ml-1" id="viewbagTotal"></span></span>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row thisContent">
+    <div class="col d-flex justify-content-center">
+        <form method="post">
+            @if (ViewBag.payment == 1 && User.IsInRole("Mechanic"))
+            {
+                <button type="submit" asp-controller="ServiceWork" asp-action="AddServiceWork" asp-route-id="@ViewBag.id" class="btn btn-primary mr-4">
+                    Edit
+                </button>
+                <a href="#exampleModal" data-bs-toggle="modal" role="button" routeId="@ViewBag.id" class="deleteMenu">
+                    <button type="button" class="btn btn-warning mr-4"> Mark as paid  </button>
+                </a>
+            }
+
+
+            <button type="button" class="btn btn-secondary mr-4 printButton" onclick="printDiv('invoiceContent')"> Print </button>
+            @*<a href="javascript:generatePDF()" class="btn-download">*@
+            <button type="button" class="btn btn-danger downloadButton" onclick="generatePDF()"> Download </button>
+            @*</a>*@
+        </form>
+    </div>
+</div>
+<div class="d-none">
+    <span id="totalCost"></span>
+    <span id="totalCostWithTax"></span>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color:white;border:1px solid white;">&#10006;</button>
+            </div>
+            <div class="modal-body">
+                <form action="" onsubmit="">
+                    <p class="mb-3 clrr">Are You sure payment is done?</p>
+                    <button type="button" id="del1" class="mt-2 reschedule-btn rounded-pill bll text-light px-3 pdd">
+                        Yes
+                    </button>
+                    <button type="button" class="btn btn-secondary rounded-pill bll text-light px-3 pdd" data-bs-dismiss="modal">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>  @*Only this script for html to pdf*@
+<script>
+    // ========================================================================================== To GENERATE PDF THIS SCRIPT =======================================================================
+    function generatePDF() {
+        var element = document.getElementById('invoiceContent');  // Choose the element that our invoice is rendered in.
+        // Choose the element and save the PDF for our user.
+        //html2pdf(element);
+        html2pdf(element, {
+            margin: [1, -14, 0, 0],
+            filename: 'Invoice.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 1.2, logging: true, dpi: 600, letterRendering: true }, // More dpi means MORE HIGH QUALITY OF DATA i.e) if 190 dpi then 300kb  and  if 600 dpi then 1MB. LIKEWISE
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        });
+    }
+</script>
+<script>
+    //$('.printButton').on('click', function () {
+    //    window.print();
+    //});
+    //=============================================================================== FOR PRINT FUNCTION TO WORK THIS SCRIPT  ====================================================
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        var price = 0;
+    $("#totalCost").val(price);
+    $(".allprice").each(function () {
+        //var thisServiceCharge = parseInt($(this).val());
+        price = price + parseInt($(this).text());
+    });
+        $("#totalCost").val(price);
+        $("#viewbagPrice").text(price);
+        console.log(parseInt($("#totalCost").val()));
+        var z = parseFloat(10 / 100);
+        var sales = parseInt(parseFloat(10 / 100) * parseInt($("#totalCost").val()));
+        $("#viewbagTax").text(sales);
+        var total = parseInt($("#totalCost").val()) + parseInt(sales);
+        $("#totalCostWithTax").val(total);
+        $("#viewbagTotal").text(total);
+        console.log(parseInt($("#totalCostWithTax").val()));
+
+        var values = {};
+        values.InvoiceId = parseInt(@ViewBag.CarAppointmentIdInvoice);
+        values.Price = parseInt($("#totalCost").val());
+        values.TotalPrice = parseInt($("#totalCostWithTax").val());
+
+    $.ajax({
+
+                url: '@Url.Action("DisplayInvoicePrices", "ServiceWork")',
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(values),
+
+                success: function (resp) {
+
+                },
+
+                error: function (err) {
+                    alert("Error while inserting data");
+                }
+
+            });
+    });
+
+</script>
+
+<script>
+                                                $('#exampleModal').appendTo("body"); // I ADDED THIS SO THAT NO MORE MODAL BACKDROP OCCURS.
+                                                var i;
+                                                $(document).on('click', '.deleteMenu', function () {
+                                                    i = parseInt($(this).attr("routeId"));
+                                                    console.log(i);
+                                                });
+                                                $(document).on('click', '#del1', function() {
+                                                    console.log(i);
+                                                    $.ajax({
+                                                    url: '@Url.Action("UpdatePaymentStatus", "CarAppointment")',
+                                                    type: 'post',
+                                                    data: { id: i},
+
+                                                    success: function(resp) {
+                                                        $('body').removeClass('modal-open'); //remove modal-open from body in case you see faded background
+                                                        $('.modal-backdrop').remove();       // remove modal-backdrop at the end of page in case you see faded background
+                                                        location.reload();
+                                                    },
+                                                    error: function(err) {
+                                                        alert("Error while inserting data");
+                                                    }
+
+                                                    });
+
+                                                });
+</script>
+
+<script>
+
+    $("#approvedAppointments").addClass('active');
+
+</script>
+
+
+@* ==================================================================    SOME PLUGINS FOR HTML TO PDF BUT THEY DID NOT WORKED PROPERLY ==============================================*@
+ @*====================================== First plugin========================*@
+@*<script>
+        function generatePDF() {
+            var doc = new jsPDF();  //create jsPDF object
+            doc.fromHTML(document.getElementById("invoiceContent"), // page element which you want to print as PDF
+                15,
+                15,
+                {
+                    'width': 170  //set width
+                },
+                function (a) {
+                    doc.save("Invoice.pdf"); // save file name as HTML2PDF.pdf
+                });
+        }
+    </script>*@
+@*=========================================== Second Plugin ===========================*@
+@*<script src="~/js/jspdf.debug.js"></script>
+    <script src="~/js/html2canvas.min.js"></script>
+    <script src="~/js/html2pdf.min.js"></script>   ---------------- These 3 src are present in 'wwwroot' -> 'js' folder so see there
+
+    <script>
+
+        const options = {
+            margin: 0.5,
+            filename: 'Invoice.pdf',    //name the output file
+
+            html2canvas: {
+                scale: 1
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a3',
+                orientation: 'portrait'   // pdf orientation
+            }
+        }
+
+        $('.downloadButton').click(function (e) {     // class for download button
+            e.preventDefault();
+            const element = document.getElementById('invoiceContent');   //id for content area
+            html2pdf().from(element).set(options).save();
+        });
+
+    </script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<h4 class="d-flex justify-content-center">Invoice:</h4>*@
+<!--<form method="post">
+    <div>
+        @for (int i = 0; i < ViewBag.Data.Count; i++)
+        {
+            <div class="d-flex justify-content-center mb-3">
+                <span>@ViewBag.Data[i].Work: </span>
+                <span>@ViewBag.Data[i].Price</span>
+            </div>
+        }
+    </div>
+    <div class="d-flex align-content-end justify-content-center row">
+        <button type="submit" style="position:relative; top:350px" asp-controller="ServiceWork" asp-action="AddServiceWork" asp-route-id="@ViewBag.id"
+                class="btn btn-primary mr-4">
+            Edit
+        </button>
+        <button type="submit" style="position:relative; top:350px"
+                class="btn btn-secondary mr-4">
+            Print
+        </button>
+        <button type="submit" style="position:relative; top:350px"
+                class="btn btn-danger">
+            Download
+        </button>
+    </div>-->
+@*<button type="submit" asp-controller="ServiceWork" asp-action="AddServiceWork" asp-route-id="@ViewBag.id" class="btn btn-primary"> Edit </button>*@
+<!--</form>-->
+@*<button type="submit" asp-controller="ServiceWork" asp-action="InvoicePage" class="btn btn-primary" asp-route-id="@ViewBag.id" id="">redirect</button>*@

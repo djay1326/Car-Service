@@ -1,0 +1,322 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Dal.CustomModelsForCustomerDashboard
+@{
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+
+<script>
+    function StarRating(rate, id) {
+        console.log(rate);
+        console.log(typeof (parseFloat(rate)));
+        console.log(parseFloat(rate).toFixed(1));
+        let allStars = "#rateGarage_" + id;
+        console.log("#rateGarage_" + id);
+        //$('#rateGarage_' + id).html("hello");
+        $('#rateGarage_' + id).rateYo({
+
+            rating: parseFloat(rate).toFixed(1),
+            starWidth: "20px",
+            readOnly: true
+        }
+        );
+    };
+</script>
+
+
+<div class="row ">
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h6 class="font-weight-600" style="margin-bottom:88px;">Total Appointments</h6>
+                                <h5 class="mb-0"><span class="col-purple">@Model.TotalAppointments</span></h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/1.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h6 class="font-weight-600" style="margin-bottom:70px;"> Completed Appointments</h6>
+
+                                <h5 class="mb-0"><span class="col-orange">@Model.CompletedAppointments</span></h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/3.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h6 class="font-weight-bold" style="margin-bottom:70px;">Pending Appointments</h6>
+                                <h5 class="mb-0">
+                                    <span class="col-blue">@Model.PendingAppointments</span>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="~/assets/img/banner/4.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-lg-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 style="font-style:italic;">My Appointments</h4>
+                <div class="d-block mr-0 ml-auto">
+                    <a asp-controller="CarAppointment" asp-action="ListAllAppointmentsOfCustomer" class="btn btn-primary">More</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Car Details</th>
+                                <th>Garage Details</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size:14px;">
+                            @foreach (var item in Model.DataOfFirstTable)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.CarModel<br />
+                                        @item.CarName<br />
+                                        @item.CarNumber
+                                    </td>
+                                    <td>
+                                        @item.GarageName<br />
+                                        @item.AddressLine1 ,@item.AddressLine2 <br />
+                                        @item.City -  @item.PostalCode        <br />
+                                        @item.State
+                                    </td>
+                                    <td>
+                                        @if (item.ServiceStatus == 1)
+                                        {
+                                            <span class="pending">Pending</span>
+                                        }
+                                        @if (item.ServiceStatus == 2)
+                                        {
+                                            <span class="completed">Accept</span>
+                                        }
+                                        @if (item.ServiceStatus == 4)
+                                        {
+                                            <span class="progress">In.Progress</span>
+                                        }
+                                        @if (item.ServiceStatus == 5)
+                                        {
+                                            <span class="waiting">Waiting for</span>
+                                            <span class="waiting2">Parts</span>
+                                        }
+                                        @if (item.ServiceStatus == 6)
+                                        {
+                                            <span class="done">Completed</span>
+                                        }
+                                        @if (item.ServiceStatus == 3)
+                                        {
+                                            <span class="cancelled">Cancelled</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.ServiceStatus == 1)
+                                        {
+                                            <a role="button" asp-controller="CarAppointment" asp-action="GetAppointmentDetailsForUpdating" asp-route-id="@item.Id">
+                                                <img src="~/assets/img/edit-icon.png" routeId="@item.Id" class="updateDetails" title="Edit" alt="" height="22" width="22" />
+                                            </a>
+                                            <a href="#exampleModal" data-bs-toggle="modal" role="button" routeId="@item.Id" class="deleteMenu">
+                                                <img src="~/assets/img/delete-icon.png" title="Delete" alt="" height="22" width="22">
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 style="font-style:italic;">My Services</h4>
+                <div class="d-block mr-0 ml-auto">
+                    <a asp-controller="CarAppointment" asp-action="CustomersServices" class="btn btn-info">More</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="overflow-x:hidden;">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Car Details</th>
+                                <th>Garage Details</th>
+                                <th>Ratings</th>
+                                <th>Status</th>
+                                <th>Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size:12px;">
+                            @foreach (var item in Model.DataOfSecondTable)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.CarModel<br />
+                                        @item.CarName<br />
+                                        @item.CarNumber
+                                    </td>
+                                    <td>
+                                        @item.GarageName<br />
+                                        @item.AddressLine1 ,@item.AddressLine2 <br />
+                                        @item.City -  @item.PostalCode        <br />
+                                        @item.State
+                                    </td>
+                                    <td>
+
+                                        <div id="rateGarage_@item.Id"></div> @*========> This @item.Id is just to make Id unique each time for loop is called so.........*@
+                                        <script>StarRating('@item.Ratings', '@item.Id') </script>
+
+                                    </td>
+                                    <td>
+                                        @if (item.ServiceStatus == 2)
+                                        {
+                                            <span class="progress">In Progress</span>
+                                        }
+                                        @if (item.ServiceStatus == 4)
+                                        {
+                                            <span class="progress">In Progress</span>
+                                        }
+                                        @if (item.ServiceStatus == 5)
+                                        {
+                                            <span class="waiting">Waiting for</span>
+                                            <span class="waiting2">Parts</span>
+                                        }
+                                        @if (item.ServiceStatus == 6)
+                                        {
+                                            <span class="done">Completed</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.PaymentStatus == 1)
+                                        {
+                                            <span class="unpaid">Unpaid</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="paid">Paid</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Delete Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color:white;border:1px solid white;">&#10006;</button>
+            </div>
+            <div class="modal-body">
+                <form action="" onsubmit="">
+                    <p class="mb-3 clrr">Are You sure you want to delete this Appointment?</p>
+                    <button type="button" id="del1" class="mt-2 reschedule-btn rounded-pill bll text-light px-3 pdd">
+                        Yes
+                    </button>
+                    <button type="button" class="btn btn-secondary rounded-pill bll text-light px-3 pdd" data-bs-dismiss="modal">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Libraies -->
+<script src="assets/bundles/apexcharts/apexcharts.min.js"></script>
+<!-- Page Specific JS File -->
+<script src="assets/js/page/index.js"></script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#customerDashboard").addClass('active');
+</script>
+<script>
+                                                $('#exampleModal').appendTo("body"); // I ADDED THIS SO THAT NO MORE MODAL BACKDROP OCCURS.
+                                                var i;
+                                                $(document).on('click', '.deleteMenu', function () {
+                                                    i = parseInt($(this).attr("routeId"));
+                                                    console.log(i);
+                                                });
+                                                $(document).on('click', '#del1', function() {
+                                                    console.log(i);
+                                                    $.ajax({
+                                                    url: '@Url.Action("DeleteAppointment", "CarAppointment")',
+                                                    type: 'post',
+                                                    data: { id: i},
+
+                                                    success: function(resp) {
+                                                        $('body').removeClass('modal-open'); //remove modal-open from body in case you see faded background
+                                                        $('.modal-backdrop').remove();       // remove modal-backdrop at the end of page in case you see faded background
+                                                        location.reload();
+                                                    },
+                                                    error: function(err) {
+                                                        alert("Error while inserting data");
+                                                    }
+
+                                                    });
+
+                                                });
+</script>

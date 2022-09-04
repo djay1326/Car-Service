@@ -1,0 +1,509 @@
+﻿
+@model IEnumerable<Dal.Models.CarAppointment>
+@{
+}
+<head>
+    <link href="~/css/manage.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <style>
+        .rateSP-btn {
+            background-color: darkgray !important;
+            /*padding: 8px 16px;*/
+            border: none;
+            color: white !important;
+            min-width: 90px;
+        }
+        .rateSPBtn2 {
+            background-color: indianred !important;
+            /*padding: 8px 16px;*/
+            border: none;
+            color: white !important;
+            min-width: 90px;
+        }
+    </style>
+</head>
+<div class="row">
+    <script>
+        function StarRating(rate, id) {
+            console.log(rate);
+            console.log(typeof (parseFloat(rate)));
+            console.log(parseFloat(rate).toFixed(1));
+            let allStars = "#rateGarage_" + id;
+            console.log("#rateGarage_" + id);
+            //$('#rateGarage_' + id).html("hello");
+            $('#rateGarage_' + id).rateYo({
+
+                rating: parseFloat(rate).toFixed(1),
+                starWidth: "20px",
+                readOnly: true
+            }
+            );
+        };
+    </script>
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>All Appointment Requests</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <form method="post" id="xyz" class="overflow-hidden" asp-controller="CarAppointment" asp-action="CustomersServices">
+                        <ul class="inputBlock1 mb-2">
+                            <li>
+                                <input type="text" class="blockb2 gapp4 h-100 da" name="anytext" value="@ViewBag.anytext" id="username" />
+                            </li>
+                            <li>
+                                <select name="paymentstatusids" id="statusOfPayment" class="blockb1 gapp h-100 da">
+                                    <option disabled selected>Payment Status</option>
+                                    @*<option value="admin">All</option>*@
+                                    @*@if (User.IsInRole("Manager"))
+                                        {
+                                            <option value="admin">All</option>
+                                        }*@
+                                    <option value="100">All</option>
+                                    <option value="2">Paid</option>
+                                    <option value="1">Unpaid</option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <select name="statusids" id="status" class="blockb1 gapp h-100 da">
+                                    <option disabled selected value="600">Status</option>
+                                    <option value="100">All</option>
+                                    <option value="4">In Progress</option>
+                                    <option value="5">Waiting for Parts</option>
+                                    <option value="6">Completed</option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <input type="date" value="@ViewBag.startdate" name="startdate" id="min" placeholder="From Date" class="blockb2 gapp4 h-100 da">
+                            </li>
+                            @*<li>
+                                    <input type="date" value="@ViewBag.enddate" name="enddate" id="max" placeholder="To Date" class="blockb2 gapp4 h-100 da">
+                                </li>*@
+                            <li>
+                            <li>
+                                <button type="submit" class="text-white gapp searchBtn h-100 mb-3" style="background: #6777EF" id="searchBtn"> Search </button>
+                            </li>
+                            <li>
+                                <a asp-controller="CarAppointment" asp-action="CustomersServices">
+                                    <button type="button" id="abc" class="gapp clearBtn h-100 mb-3">Clear</button>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <table class="table table-hover mb-0 overflow-hidden" id="tab1">
+                            <thead>
+                                <tr class="vw-100">
+                                    <th width="50">#</th>
+                                    <th width="100">Car Details</th>
+                                    <th width="115">Created Date</th>
+                                    <th width="50">Approx Cost</th>
+                                    <th width="135">Garage Details</th>
+                                    <th width="135">Garage Ratings</th>
+                                    <th width="80">Status</th>
+                                    <th width="50">Payment Status</th>
+                                    <th>Invoice</th>
+                                    <th width="100">Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td scope="row" class="font-weight-600">@item.Id</td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none">
+                                                <p class="m-0">
+
+                                                    @*<img src="~/images/home.png" alt="" height="19" width="16">*@
+                                                    <span>
+                                                        Manufacturer : @item.CarModel  <br />
+                                                        Model : @item.CarName  <br />
+                                                        Number : @item.CarNumber
+                                                    </span>
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td scope="row" class="font-weight-600">@item.AppointmentAcceptDate.Value.ToShortDateString()</td>
+                                        <td scope="row" class="font-weight-600">@item.ApproxCost</td>
+                                        <td>
+                                            <a href="#" class="text-decoration-none">
+                                                <p class="m-0">
+                                                    <span>
+                                                        <span class="font-weight-600">@item.GarageName</span> <br />
+                                                        @item.AddressLine1 ,@item.AddressLine2 <br />
+                                                        @item.City -  @item.PostalCode        <br />
+                                                        @item.State
+                                                    </span>
+                                                </p>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if (item.RatingsGiven != null)
+                                            {
+                                                <div id="rateGarage_@item.Id"></div> @*========> This @item.Id is just to make Id unique each time for loop is called so.........*@
+                                                <script>StarRating('@item.RatingsGiven','@item.Id') </script>
+                                            }
+                                        </td>
+                                        <td scope="row">
+
+                                            @if (item.ServiceStatus == 2)
+                                            {
+                                                <span class="progress">In Progress</span>
+                                            }
+                                            @if (item.ServiceStatus == 4)
+                                            {
+                                                <span class="progress">In Progress</span>
+                                            }
+                                            @if (item.ServiceStatus == 5)
+                                            {
+                                                <span class="waiting">Waiting for</span>
+                                                <span class="waiting2">Parts</span>
+                                            }
+                                            @if (item.ServiceStatus == 6)
+                                            {
+                                                <span class="done">Completed</span>
+                                            }
+
+                                        </td>
+                                        <td scope="row">
+                                            @if (item.StatusOfPayment == 1)
+                                            {
+                                                <span class="unpaid">Unpaid</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="paid">Paid</span>
+                                            }
+
+                                        </td>
+                                        <td scope="row">
+                                            @if (item.ServiceStatus == 6)
+                                            {
+
+                                                <a asp-controller="ServiceWork" asp-action="InvoicePage" asp-route-id="@item.Id">
+                                                    <button type="button" class="btn btn-info">Invoice</button>
+                                                </a>
+
+                                            }
+                                        </td>
+                                        <td scope="row">
+                                            @if (item.ServiceStatus == 6 && item.StatusOfPayment == 2 && item.RatingsGiven == null)
+                                            {
+
+                                                <a routeId="@item.Id" class="rateSP-btn btn btn-secondary rounded-pill text-light text-decoration-none"
+                                                   data-bs-toggle="modal" data-bs-target="#RateSPModal">Rate</a>
+
+                                            }
+                                            @if (item.ServiceStatus == 6 && item.StatusOfPayment == 2 && item.RatingsGiven != null)
+                                            {
+                                                <a routeId="@item.Id" class="rateSPBtn2 btn btn-secondary rounded-pill text-light text-decoration-none">
+                                                   Update Rating</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="d-none">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Car Details</th>
+                                    <th>Created Date</th>
+                                    <th>Approx Cost</th>
+                                    <th>Garage Details</th>
+                                    @*<th>Garage Ratings</th>*@
+                                    <th>Status</th>
+                                    <th>Payment Status</th>
+                                    <th>Invoice</th>
+                                    <th>Rate</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================  First time giving Rate Modal ======================================= -->
+<div class="modal fade" id="RateSPModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mx-auto" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form>
+
+                    <div>
+                        <h5><b>Rate the garage</b></h5>
+                    </div>
+                    <hr>
+                    <div>
+                        <span style="font-size:20px;">Rate:</span>
+                        <span id="rateYo" class="rateyo"></span>
+                        <div class="result">0</div>
+                    </div>
+
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-12">
+                            <label for="fbofsp" class="cm-dez">Any Comments:</label>
+                            <textarea class="form-control" id="cmnts" rows="3" placeholder=""></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button type="button" class="submit-btn btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================  Second time giving Rate Modal ======================================= -->
+<div class="modal fade" id="UpdateRateSPModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mx-auto" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form>
+
+                    <div>
+                        <h5><b>Rate the garage</b></h5>
+                    </div>
+                    <hr>
+                    <div>
+                        <span style="font-size:20px;">Rate:</span>
+                        <span id="rateYo" class="rateyo"></span>
+                        <div class="result">0</div>
+                    </div>
+
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-12">
+                            <label for="fbofsp" class="cm-dez">Any Comments:</label>
+                            <textarea class="form-control" id="cmnts" rows="3" placeholder=""></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button type="button" class="submit-btn btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script>
+        var x = parseInt(@ViewBag.status);
+        $('#status').val(x);
+
+        var y = parseInt(@ViewBag.statusOfPayment);
+        $("#statusOfPayment").val(y);
+    </script>
+    <script>
+        $('#RateSPModal').appendTo("body");
+        $('#UpdateRateSPModal').appendTo("body");
+        $("#myServices").addClass('active');
+    </script>
+    <script>
+        // =============================================================  This the function to give rating in the modal First time ===================================================
+        $(function () {
+
+            $(".rateyo").rateYo().on("rateyo.change", function (e, data) {
+                var rating = data.rating;
+                $(this).parent().find('.result').text('rating : ' + rating);
+                $(this).parent().find('.result').val(rating);
+
+            });
+            $("#rateYo").rateYo({
+                starWidth: "40px"
+            });
+
+        });
+        var i;
+    $(document).on('click', '.rateSP-btn', function () {
+        i = parseInt($(this).attr('routeId'));
+    });
+
+    $(document).on('click', '.submit-btn', function () {
+        var values = {};
+        values.CarAppointmentId = parseInt(i);
+        values.Ratings = parseFloat($(".result").val());
+        values.Comments = $("#cmnts").val();
+        console.log(values);
+
+        $.ajax({
+             url: '@Url.Action("GetRatings", "CarAppointment")',
+             type: 'post',
+             dataType: 'json',
+             contentType: 'application/json',
+            data: JSON.stringify(values),
+            success: function (resp) {
+
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                //alert("Done rating");
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                alert("Error while inserting data");
+            }
+        });
+    });
+    </script>
+    <script>
+
+        function RatingUpdate(rate) {
+            console.log("Rate is="+rate);
+            console.log(typeof (parseFloat(rate)));
+            console.log(parseFloat(rate).toFixed(1));
+
+            $('#getRate').rateYo({
+
+                rating: parseFloat(rate).toFixed(1),
+                starWidth: "40px",
+                readOnly: false
+            }
+            );
+        };
+
+
+        $(document).on('click', '.rateSPBtn2', function () {
+            var values = parseInt($(this).attr("routeId"));
+            console.log('clicked');
+             $.ajax({
+                    url: '@Url.Action("UpdateRating", "CarAppointment")',
+                    type: 'get',
+                    dataType: 'html',
+                    contentType: 'application/html',
+                    data: { id: values },
+
+                    success: function(resp) {
+                        $("#UpdateRateSPModal .modal-body").html(resp);
+                        $("#UpdateRateSPModal").modal('show');
+                        //$('.modal-backdrop').remove();
+                    },
+                    error: function(err) {
+                        alert("Error while fetching data");
+                    }
+             });
+        });
+
+        var id;
+        $(document).on('click', '.rateSPBtn2', function () {
+            id = parseInt($(this).attr('routeId'));
+            });
+
+        $(document).on('click', '#UpdateRatingOnSubmit', function () {
+        var details = {};
+            details.CarAppointmentId = parseInt(id);
+            details.Ratings = parseFloat($(".updatedresult").val());
+            details.Comments = $("#comments").val();
+            console.log(details);
+
+        $.ajax({
+             url: '@Url.Action("GetRatings", "CarAppointment")',
+             type: 'post',
+             dataType: 'json',
+             contentType: 'application/json',
+            data: JSON.stringify(details),
+            success: function (resp) {
+
+                //$("#addNewAddressModal").modal("hide");
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                //alert("Done rating");
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                alert("Error while inserting data");
+            }
+        });
+    });
+
+    </script>
+    
+    <script>
+    var s = 0;
+    $(document).on('click', '#s1', function () {
+        $("#s1").attr('src', '/images/star1.png');
+        $("#s2,#s3,#s4,#s5").attr('src', '/images/star2.png');
+        s = 1;
+    });
+    $(document).on('click', '#s2', function () {
+        $("#s1,#s2").attr('src', '/images/star1.png');
+        $("#s3,#s4,#s5").attr('src', '/images/star2.png');
+        s = 2;
+    });
+    $(document).on('click', '#s3', function () {
+        $("#s1,#s2,#s3").attr('src', '/images/star1.png');
+        $("#s4,#s5").attr('src', '/images/star2.png');
+        s = 3;
+    });
+    $(document).on('click', '#s4', function () {
+        $("#s1,#s2,#s3,#s4").attr('src', '/images/star1.png');
+        $("#s5").attr('src', '/images/star2.png');
+        s = 4;
+    });
+    $(document).on('click', '#s5', function () {
+        $("#s1,#s2,#s3,#s4,#s5").attr('src', '/images/star1.png');
+        s = 5;
+    });
+
+    @*var i;
+    $(document).on('click', '.rateSP-btn', function () {
+        i = parseInt($(this).attr('routeId'));
+    });
+
+    $(document).on('click', '.submit-btn', function () {
+        var values = {};
+        values.CarAppointmentId = parseInt(i);
+        values.Ratings = parseInt(s);
+        values.Comments = $("#cmnts").val();
+        console.log(values);
+
+        $.ajax({
+             url: '@Url.Action("GetRatings", "CarAppointment")',
+             type: 'post',
+             dataType: 'json',
+             contentType: 'application/json',
+            data: JSON.stringify(values),
+            success: function (resp) {
+
+                //$("#addNewAddressModal").modal("hide");
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                alert("Done rating");
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                alert("Error while inserting data");
+            }
+        });
+    });*@
+    </script>
+}
+

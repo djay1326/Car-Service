@@ -1,0 +1,344 @@
+﻿@model Dal.Models.Garage
+@{
+}
+<a asp-controller="Garage" asp-action="ListAllAvailableGaragesforCustomer">Back</a>
+<h4 style="margin-top:20px;">Book Appointment</h4>
+<hr style="background-color: darkgray;" />
+<form method="post" id="formData">
+    <div class="row">
+        <div class="mt-5 mb-3 col">
+            <span>Pickup the Appointment Date :</span>
+            <span>
+                <input type="datetime-local" id="appointmentDate" value="" style="margin-left:20px;" />
+                <input type="hidden" value="@ViewBag.GarageId" id="idOfGarage" />
+            </span>
+        </div>
+        <div class="form-group col mt-5 mb-3">
+            <span>Select Manufacturer :</span>
+            <select id="selectManufacturer" style="width:200px;height:30px; margin-left:20px" asp-items="@(new SelectList(@ViewBag.cars,"CarManufacturerId","NameOfCar"))">
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <span>Select Fuel Type :</span>
+            <select id="selectFuelType" name="cars" style="width:200px;height:30px; margin-left:20px">
+                <option value="1">Petrol</option>
+                <option value="2">Diesel</option>
+            </select>
+        </div>
+        <div class="col mb-3">
+            <span>Enter Car Model Name :</span>
+            <input type="text" id="carName" value="" style="width:200px;height:30px; margin-left:20px" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <span>Enter Car Number :</span>
+            <input type="text" id="carNumber" value="" style="width:200px;height:30px; margin-left:20px" />
+        </div>
+    </div>
+    <hr style="background-color: darkgray;" />
+    <h5 class="">Select the Packages you want in your service:</h5>
+
+    @*<form>*@
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" packagePrice="" value="@Model.ServiceCharge"
+                       id="checkServiceCharges" checked>
+                <label class="form-check-label" for="checkServiceCharges">
+                    Service Charges (Rs @Model.ServiceCharge)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input " type="checkbox" value="@Model.KeyRegistration" id="checkKeyRegisterCharges">
+                <label class="form-check-label" for="checkKeyRegisterCharges">
+                    Key Registration Charges (Rs @Model.KeyRegistration)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.WashAndClean" id="checkVehicleWash">
+                <label class="form-check-label" for="checkVehicleWash">
+                    Vehicle Washing and Cleaning (Rs @Model.WashAndClean)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.WheelAlignment" id="checkWheelAlign">
+                <label class="form-check-label" for="checkWheelAlign">
+                    Wheel Alignment (Rs @Model.WheelAlignment)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.WheelBalancing" id="checkWheelBalance">
+                <label class="form-check-label" for="checkWheelBalance">
+                    Wheel Balancing (Rs @Model.WheelBalancing)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.PickupAndDrop" id="checkPickupandDrop">
+                <label class="form-check-label" for="checkPickupandDrop">
+                    Pickup and Drop (Rs @Model.PickupAndDrop)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.PickupOrDrop" id="checkPickuporDrop">
+                <label class="form-check-label" for="checkPickuporDrop">
+                    Pickup/Drop (Rs @Model.PickupOrDrop)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.OneSidePickOrDrop" id="checkOneSidePickupOrDrop">
+                <label class="form-check-label" for="checkOneSidePickupOrDrop">
+                    One Side Pickup or Drop (Rs @Model.OneSidePickOrDrop)
+                </label>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.BodyClean" id="checkBodyClean">
+                <label class="form-check-label" for="checkBodyClean">
+                    Vehicle Body Cleaning (Rs @Model.BodyClean)
+                </label>
+            </div>
+        </div>
+    </div>
+    <hr style="background-color: lightgray;" />
+    <div class="d-flex mt-5">
+        <span class="font-weight-bold lead ml-auto">Approx Cost:</span>&nbsp;&nbsp;&nbsp;
+        @*<input type="number" id="totalCost" value="@Model.ServiceCharge">*@
+        <span id="totalCost" style="font-size:23px;"></span>
+    </div>
+
+    <button type="button" class="btn btn-success" id="bookAppointment">Book</button>
+
+
+    @section Scripts{
+        
+        @*<script>
+                $(document).on('change', 'input[type=checkbox]', function () {
+                    $('input[type=checkbox]').each(function () {
+                        let ischecked = $(this).prop('checked');
+                        console.log(ischecked);
+                        //if (ischecked == true) {
+                        //    $(this).attr('checked', true).val($(this).val());
+                        //}
+                        //else {
+                        //    $(this).attr('checked', false).val(0);
+                        //}
+
+                     });
+                });
+                var x = 0;
+                x = x + $('input[type=checkbox]').attr('checked', true).val();
+                console.log(x);
+            </script>*@
+        <script>
+            $('#bookAppointment').on('click', function () {
+                $('#formData input[type=checkbox]').each(function () {
+                    var ischecked = $(this).prop('checked');
+                    if (ischecked == false) {
+
+                        $(this).attr('checked', false).val(0);
+                    }
+                   // alert($(this).val());
+
+                });
+
+                var values = {};
+                values.GarageId = parseInt($("#idOfGarage").val());
+                values.AppointmentDate = $("#appointmentDate").val();
+                values.ServiceCharge = parseInt($("#checkServiceCharges").val());
+                values.KeyRegistration = parseInt($("#checkKeyRegisterCharges").val());
+                values.WashAndClean = parseInt($("#checkVehicleWash").val());
+                values.WheelAlignment = parseInt($("#checkWheelAlign").val());
+                values.WheelBalancing = parseInt($("#checkWheelBalance").val());
+                values.PickupAndDrop = parseInt($("#checkPickupandDrop").val());
+                values.PickupOrDrop = parseInt($("#checkPickuporDrop").val());
+                values.OneSidePickOrDrop = parseInt($("#checkOneSidePickupOrDrop").val());
+                values.BodyClean = parseInt($("#checkBodyClean").val());
+                values.ApproxCost = parseInt($("#totalCost").val());
+
+                values.CarName = $("#carName").val();
+                values.CarNumber = $("#carNumber").val();
+                values.carManufactureId = parseInt($("#selectManufacturer option:selected").val());
+                values.carModel = $("#selectManufacturer option:selected").text();
+                values.carFuelType = parseInt($("#selectFuelType option:selected").val());
+                console.log(values);
+                $.ajax({
+                    url: '@Url.Action("PostMethodofCustomerMakesAppointment", "CarAppointment")',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(values),
+
+                    success: function(resp) {
+
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        alert("Appointment made");
+                        window.location.href = '@Url.Action("ListAllAvailableGaragesforCustomer", "Garage")';
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        alert("Error while inserting data");
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                var totalCost = parseInt($('#checkServiceCharges').val());
+                $("#totalCost").html(totalCost);
+                $('#checkServiceCharges').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkKeyRegisterCharges').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkVehicleWash').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkWheelAlign').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkWheelBalance').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkPickupandDrop').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkPickuporDrop').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkOneSidePickupOrDrop').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+
+                $('#checkBodyClean').on('change', function () {
+                    if (this.checked) {
+                        totalCost = totalCost + parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    else if (!this.checked) {
+                        totalCost = totalCost - parseInt($(this).val());
+                        $("#totalCost").html(totalCost);
+                        $("#totalCost").val(totalCost);
+                    }
+                    console.log(totalCost);
+                });
+            });
+        </script>
+    }
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#AllAvailableGarages").addClass('active');   
+</script>
