@@ -87,6 +87,8 @@ namespace Cars.Controllers
             _garageServices.DeleteGarageImage(id);
             return true;
         }
+
+        [HttpGet]
         public IActionResult UploadMultipleImages(int id)
         {
             ViewBag.Id = id;
